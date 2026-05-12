@@ -3,816 +3,1080 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Polígonos Inscritos na Circunferência</title>
+<title>Nicolas aprende: Polígonos Inscritos</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap');
 
-  :root {
-    --bg: #0a0a12;
-    --card: #12121e;
-    --border: #1e1e35;
-    --accent: #7c6af7;
-    --accent2: #f7c26a;
-    --accent3: #6af7c2;
-    --text: #e8e6ff;
-    --muted: #888aaa;
-    --red: #f76a6a;
-  }
+:root {
+  --bg: #f0f4ff;
+  --card: #ffffff;
+  --border: #dde3f7;
+  --purple: #6c5ce7;
+  --purple-light: #ede9ff;
+  --yellow: #fdcb6e;
+  --yellow-dark: #e17055;
+  --green: #00b894;
+  --green-light: #d4f5ec;
+  --red: #e17055;
+  --red-light: #ffe5df;
+  --blue: #0984e3;
+  --blue-light: #dff0ff;
+  --text: #2d3436;
+  --muted: #636e72;
+  --shadow: 0 4px 20px rgba(108,92,231,0.12);
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin:0; padding:0; box-sizing:border-box; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    min-height: 100vh;
-    padding: 24px 16px 60px;
-  }
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  padding: 0 0 80px;
+  min-height: 100vh;
+}
 
-  /* Header */
-  .header {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-  .tag {
-    display: inline-block;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--accent);
-    border: 1px solid var(--accent);
-    border-radius: 20px;
-    padding: 4px 14px;
-    letter-spacing: 2px;
-    margin-bottom: 14px;
-    text-transform: uppercase;
-  }
-  h1 {
-    font-size: clamp(24px, 6vw, 42px);
-    font-weight: 800;
-    line-height: 1.1;
-    background: linear-gradient(135deg, #7c6af7 0%, #f7c26a 60%, #6af7c2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .subtitle {
-    color: var(--muted);
-    font-size: 14px;
-    margin-top: 8px;
-    font-family: 'Space Mono', monospace;
-  }
+/* ---- HERO ---- */
+.hero {
+  background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+  padding: 28px 20px 24px;
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -30px; left: -20px;
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+.hero-greeting {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  opacity: 0.85;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.hero-title {
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+.hero-title span { color: #fdcb6e; }
 
-  /* Nav tabs */
-  .nav {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 28px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    scrollbar-width: none;
-  }
-  .nav::-webkit-scrollbar { display: none; }
-  .tab {
-    white-space: nowrap;
-    padding: 8px 18px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--card);
-    color: var(--muted);
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all .2s;
-  }
-  .tab.active {
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
-  }
+/* XP Bar */
+.xp-wrap {
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 320px;
+  margin: 0 auto;
+}
+.xp-icon { font-size: 20px; }
+.xp-info { flex: 1; text-align: left; }
+.xp-label { font-size: 11px; font-weight: 700; opacity: 0.8; letter-spacing: 1px; text-transform: uppercase; }
+.xp-bar-wrap { background: rgba(255,255,255,0.2); border-radius: 10px; height: 8px; margin-top: 4px; overflow: hidden; }
+.xp-bar { background: #fdcb6e; height: 100%; border-radius: 10px; transition: width .5s ease; }
+.xp-val { font-size: 14px; font-weight: 900; color: #fdcb6e; }
 
-  /* Sections */
-  .section { display: none; }
-  .section.active { display: block; }
+/* ---- NAV ---- */
+.nav-wrap { background: white; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
+.nav { display: flex; overflow-x: auto; scrollbar-width: none; }
+.nav::-webkit-scrollbar { display: none; }
+.nav-btn {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all .2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+.nav-btn.active { color: var(--purple); border-bottom-color: var(--purple); }
 
-  /* Concept cards */
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px;
-    margin-bottom: 16px;
-  }
-  .card-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--accent2);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .card-title .icon {
-    width: 28px; height: 28px;
-    border-radius: 8px;
-    background: rgba(247,194,106,0.15);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px;
-  }
-  .card p { color: var(--muted); font-size: 14px; line-height: 1.7; }
-  .card p + p { margin-top: 8px; }
+/* ---- SECTIONS ---- */
+.section { display: none; padding: 20px 16px; }
+.section.active { display: block; }
 
-  .highlight {
-    background: rgba(124,106,247,0.12);
-    border-left: 3px solid var(--accent);
-    border-radius: 0 8px 8px 0;
-    padding: 12px 16px;
-    margin: 12px 0;
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    color: var(--text);
-    line-height: 1.8;
-  }
-  .green { color: var(--accent3); }
-  .yellow { color: var(--accent2); }
-  .purple { color: var(--accent); }
-  .red-c { color: var(--red); }
+/* ---- CARDS ---- */
+.card {
+  background: var(--card);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
 
-  /* Visual canvas area */
-  .canvas-wrap {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 16px;
-    text-align: center;
-  }
-  .canvas-wrap h3 {
-    font-size: 14px;
-    color: var(--muted);
-    margin-bottom: 12px;
-    font-family: 'Space Mono', monospace;
-    letter-spacing: 1px;
-  }
-  canvas {
-    border-radius: 10px;
-    max-width: 100%;
-  }
+/* ---- MACETE BOX ---- */
+.macete {
+  background: linear-gradient(135deg, #fdcb6e22, #e1700522);
+  border: 2px dashed #fdcb6e;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 14px;
+  position: relative;
+}
+.macete-label {
+  position: absolute;
+  top: -11px; left: 14px;
+  background: #fdcb6e;
+  color: #744210;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+.macete p { font-size: 14px; color: var(--text); line-height: 1.7; margin-top: 4px; }
+.macete strong { color: var(--yellow-dark); }
 
-  /* Selector */
-  .controls {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-  }
-  .btn {
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--card);
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all .2s;
-  }
-  .btn.sel { background: var(--accent3); color: #000; border-color: var(--accent3); }
-  .btn:hover { border-color: var(--accent); }
+/* ---- CONCEITO ---- */
+.conceito-title {
+  font-size: 17px;
+  font-weight: 900;
+  color: var(--purple);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.badge-icon {
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  background: var(--purple-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.conceito-body { font-size: 14px; color: var(--muted); line-height: 1.8; }
 
-  /* Info box */
-  .info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 12px;
-  }
-  .info-item {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px;
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-  }
-  .info-item .label { color: var(--muted); margin-bottom: 4px; }
-  .info-item .value { color: var(--accent2); font-size: 14px; font-weight: 700; }
+/* ---- FORMULA BOX ---- */
+.formula {
+  background: var(--purple-light);
+  border-left: 4px solid var(--purple);
+  border-radius: 0 12px 12px 0;
+  padding: 12px 14px;
+  margin: 12px 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  color: #3d3185;
+  line-height: 2;
+}
+.formula .dest { color: var(--purple); font-weight: 700; font-size: 16px; }
 
-  /* Exercises */
-  .exercise {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px;
-    margin-bottom: 16px;
-  }
-  .ex-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 14px;
-  }
-  .ex-num {
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    background: var(--accent);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-  .ex-title { font-size: 15px; font-weight: 700; }
-  .ex-body { color: var(--muted); font-size: 14px; line-height: 1.7; margin-bottom: 14px; }
+/* ---- VISUAL CANVAS ---- */
+.canvas-section {
+  background: var(--card);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+.canvas-section h3 {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--muted);
+  margin-bottom: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+canvas { border-radius: 12px; max-width: 100%; display: block; margin: 0 auto; }
 
-  .options { display: flex; flex-direction: column; gap: 8px; }
-  .option {
-    padding: 11px 16px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: rgba(255,255,255,0.02);
-    cursor: pointer;
-    font-size: 14px;
-    font-family: 'Space Mono', monospace;
-    transition: all .2s;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .option:hover { border-color: var(--accent); background: rgba(124,106,247,0.08); }
-  .option.correct { border-color: var(--accent3); background: rgba(106,247,194,0.08); color: var(--accent3); }
-  .option.wrong { border-color: var(--red); background: rgba(247,106,106,0.08); color: var(--red); }
-  .option-letter {
-    width: 24px; height: 24px;
-    border-radius: 6px;
-    background: var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
+.poly-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 12px;
+}
+.poly-btn {
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 2px solid var(--border);
+  background: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .2s;
+}
+.poly-btn.active { background: var(--purple); color: white; border-color: var(--purple); }
 
-  .feedback {
-    margin-top: 12px;
-    padding: 12px 16px;
-    border-radius: 10px;
-    font-size: 13px;
-    line-height: 1.6;
-    display: none;
-  }
-  .feedback.show { display: block; }
-  .feedback.ok { background: rgba(106,247,194,0.08); border: 1px solid var(--accent3); color: var(--accent3); }
-  .feedback.err { background: rgba(247,106,106,0.08); border: 1px solid var(--red); color: var(--red); }
+.poly-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+.stat-box {
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+}
+.stat-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-val { font-size: 18px; font-weight: 900; color: var(--purple); font-family: 'Space Mono', monospace; margin-top: 2px; }
 
-  /* Formula table */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
-  th {
-    background: rgba(124,106,247,0.15);
-    color: var(--accent);
-    padding: 10px 12px;
-    text-align: left;
-    font-family: 'Space Mono', monospace;
-    border-bottom: 1px solid var(--border);
-  }
-  td {
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--border);
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-  }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: rgba(255,255,255,0.02); }
-  .val { color: var(--text); }
+/* ---- TABELA ---- */
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.tabela th {
+  background: var(--purple-light);
+  color: var(--purple);
+  padding: 9px 10px;
+  text-align: left;
+  font-weight: 900;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.tabela td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  font-weight: 600;
+}
+.tabela td:first-child { color: var(--text); font-weight: 800; }
+.tabela tr:last-child td { border-bottom: none; }
+.destaque td { background: #fff5e6 !important; }
+.destaque td:first-child { color: var(--yellow-dark) !important; }
 
-  /* Score */
-  .score-bar {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px 20px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .score-label { font-size: 13px; color: var(--muted); }
-  .score-val { font-size: 22px; font-weight: 800; color: var(--accent2); font-family: 'Space Mono', monospace; }
+/* ---- LEVELS / QUIZ ---- */
+.level-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.level-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+.level-badge.lv1 { background: var(--green-light); color: var(--green); }
+.level-badge.lv2 { background: var(--blue-light); color: var(--blue); }
+.level-badge.lv3 { background: #fff5e6; color: var(--yellow-dark); }
+.level-badge.lv4 { background: var(--red-light); color: var(--red); }
+.level-badge.lv5 { background: var(--purple-light); color: var(--purple); }
+.level-name { font-size: 16px; font-weight: 900; }
+.level-sub { font-size: 12px; color: var(--muted); font-weight: 600; }
+
+.question-card {
+  background: var(--card);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  padding: 18px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+.question-card .q-num {
+  position: absolute;
+  top: -10px; left: 16px;
+  background: var(--purple);
+  color: white;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+.q-text { font-size: 15px; font-weight: 700; line-height: 1.5; margin-bottom: 14px; margin-top: 6px; color: var(--text); }
+.q-hint { font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 5px; }
+
+.opts { display: flex; flex-direction: column; gap: 8px; }
+.opt {
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all .15s;
+  color: var(--text);
+}
+.opt:hover { border-color: var(--purple); background: var(--purple-light); }
+.opt.correct { border-color: var(--green); background: var(--green-light); color: #006a51; }
+.opt.wrong { border-color: var(--red); background: var(--red-light); color: #a0392b; }
+.opt-letter {
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  font-weight: 900;
+  flex-shrink: 0;
+  color: var(--purple);
+}
+.opt.correct .opt-letter { background: var(--green); color: white; }
+.opt.wrong .opt-letter { background: var(--red); color: white; }
+
+.feedback-box {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.6;
+  display: none;
+}
+.feedback-box.show { display: block; }
+.feedback-box.ok { background: var(--green-light); color: #00614a; border: 1px solid #b0ead9; }
+.feedback-box.err { background: var(--red-light); color: #a0392b; border: 1px solid #f5c0b0; }
+
+.xp-gain {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #fdcb6e;
+  color: #744210;
+  font-size: 12px;
+  font-weight: 900;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-left: 8px;
+  animation: popIn .3s ease;
+}
+@keyframes popIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ---- PLACAR ---- */
+.scoreboard {
+  background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 16px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.score-info .label { font-size: 12px; font-weight: 700; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
+.score-info .val { font-size: 28px; font-weight: 900; font-family: 'Space Mono', monospace; }
+.score-stars { display: flex; gap: 4px; font-size: 22px; }
+
+/* ---- SEPARADOR DE NIVEL ---- */
+.level-sep {
+  text-align: center;
+  margin: 8px 0 16px;
+  position: relative;
+}
+.level-sep::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 0; right: 0;
+  height: 1px;
+  background: var(--border);
+}
+.level-sep span {
+  background: var(--bg);
+  position: relative;
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="tag">Geometria Plana</div>
-  <h1>Polígonos Inscritos<br>na Circunferência</h1>
-  <p class="subtitle">teoria · visualização · exercícios</p>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-greeting">🎮 Material de Estudo</div>
+  <div class="hero-title">Oi, <span>Nicolas!</span><br>Bora aprender? 🔥</div>
+  <div class="xp-wrap">
+    <div class="xp-icon">⭐</div>
+    <div class="xp-info">
+      <div class="xp-label">Experiência (XP)</div>
+      <div class="xp-bar-wrap"><div class="xp-bar" id="xpBar" style="width:0%"></div></div>
+    </div>
+    <div class="xp-val" id="xpVal">0 XP</div>
+  </div>
 </div>
 
-<div class="nav">
-  <button class="tab active" onclick="goTab(0)">📖 Teoria</button>
-  <button class="tab" onclick="goTab(1)">🔵 Visual</button>
-  <button class="tab" onclick="goTab(2)">📐 Fórmulas</button>
-  <button class="tab" onclick="goTab(3)">✏️ Exercícios</button>
+<!-- NAV -->
+<div class="nav-wrap">
+  <div class="nav">
+    <button class="nav-btn active" onclick="goTab(0,this)">📖 Conceitos</button>
+    <button class="nav-btn" onclick="goTab(1,this)">🔵 Ver na Prática</button>
+    <button class="nav-btn" onclick="goTab(2,this)">⚡ Macetes</button>
+    <button class="nav-btn" onclick="goTab(3,this)">🎮 Desafios</button>
+  </div>
 </div>
 
-<!-- ===================== TAB 0: TEORIA ===================== -->
+<!-- ===== TAB 0: CONCEITOS ===== -->
 <div class="section active" id="tab0">
 
   <div class="card">
-    <div class="card-title"><span class="icon">💡</span> O que é um polígono inscrito?</div>
-    <p>Um <strong style="color:var(--text)">polígono inscrito na circunferência</strong> é aquele cujos <strong style="color:var(--accent2)">todos os vértices pertencem à circunferência</strong>. A circunferência é chamada de <span class="green">circunscrita</span> ao polígono.</p>
-    <div class="highlight">
-      Polígono inscrito → vértices <span class="green">sobre</span> a circunferência<br>
-      Centro da circunferência = <span class="yellow">circuncentro</span> do polígono
+    <div class="conceito-title">
+      <div class="badge-icon">💡</div>
+      O que é isso?
     </div>
-    <p>Todo polígono regular pode ser inscrito em uma circunferência — o centro coincide com o centro do polígono.</p>
-  </div>
-
-  <div class="card">
-    <div class="card-title"><span class="icon">📐</span> Ângulo Central</div>
-    <p>Cada lado do polígono regular de <strong style="color:var(--text)">n lados</strong> subentende um <strong style="color:var(--accent)">ângulo central</strong> igual:</p>
-    <div class="highlight">
-      α = <span class="purple">360°</span> ÷ <span class="yellow">n</span>
+    <div class="conceito-body">
+      Um <strong>polígono inscrito</strong> é quando um polígono fica <strong>dentro da circunferência</strong> com todos os seus vértices <em>tocando</em> a circunferência — nenhum pra dentro, nenhum pra fora.
     </div>
-    <p>Exemplos:</p>
-    <div class="highlight">
-      Triângulo (n=3) → α = 360°/3 = <span class="green">120°</span><br>
-      Quadrado (n=4) → α = 360°/4 = <span class="green">90°</span><br>
-      Hexágono (n=6) → α = 360°/6 = <span class="green">60°</span><br>
-      Octógono (n=8) → α = 360°/8 = <span class="green">45°</span>
+    <div style="background:#f0f4ff; border-radius:12px; padding:12px; margin-top:12px; font-size:13px; font-weight:700; color:var(--purple); display:flex; align-items:center; gap:8px;">
+      <span style="font-size:18px;">🎯</span>
+      Pensa assim: os cantos do polígono estão "pregados" na borda da circunferência!
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">📏</span> Lado do polígono regular inscrito</div>
-    <p>Dado um polígono regular de <strong style="color:var(--text)">n lados</strong> inscrito em uma circunferência de raio <strong style="color:var(--accent2)">R</strong>:</p>
-    <div class="highlight">
-      ℓ = <span class="yellow">2R</span> · sen(<span class="purple">180°/n</span>)
+    <div class="conceito-title">
+      <div class="badge-icon">📐</div>
+      Ângulo Central
     </div>
-    <p>Essa fórmula vem de aplicar a Lei dos Senos no triângulo isósceles formado pelo centro e dois vértices consecutivos.</p>
-  </div>
-
-  <div class="card">
-    <div class="card-title"><span class="icon">⭐</span> Casos especiais memoráveis</div>
-    <div class="highlight">
-      <span class="yellow">Triângulo equilátero</span>: ℓ = R√3<br>
-      <span class="yellow">Quadrado</span>: ℓ = R√2<br>
-      <span class="yellow">Hexágono regular</span>: ℓ = R (lado = raio!)<br>
-      <span class="yellow">Pentágono regular</span>: ℓ = R · (√10 − 2√5)/2
+    <div class="conceito-body">
+      Todo polígono regular divide a circunferência em partes <strong>iguais</strong>. O ângulo de cada pedaço é o <strong>ângulo central</strong>:
     </div>
-    <p><span class="green">⭐ Mais cobrado:</span> O hexágono regular tem o lado igual ao raio da circunferência circunscrita. Grave isso!</p>
-  </div>
-
-</div>
-
-<!-- ===================== TAB 1: VISUAL ===================== -->
-<div class="section" id="tab1">
-
-  <div class="canvas-wrap">
-    <h3>// VISUALIZAÇÃO INTERATIVA</h3>
-    <canvas id="mainCanvas" width="320" height="320"></canvas>
-    <div id="polyInfo" class="info-grid" style="margin-top:12px"></div>
-  </div>
-
-  <div class="controls" id="polyBtns">
-    <button class="btn sel" onclick="selectPoly(3, this)">Triângulo</button>
-    <button class="btn" onclick="selectPoly(4, this)">Quadrado</button>
-    <button class="btn" onclick="selectPoly(5, this)">Pentágono</button>
-    <button class="btn" onclick="selectPoly(6, this)">Hexágono</button>
-    <button class="btn" onclick="selectPoly(8, this)">Octógono</button>
-    <button class="btn" onclick="selectPoly(12, this)">Dodecágono</button>
+    <div class="formula">
+      Ângulo central = <span class="dest">360° ÷ número de lados (n)</span>
+    </div>
+    <div class="conceito-body">
+      Triângulo (3 lados): 360° ÷ 3 = <strong style="color:var(--green)">120°</strong><br>
+      Quadrado (4 lados): 360° ÷ 4 = <strong style="color:var(--green)">90°</strong><br>
+      Hexágono (6 lados): 360° ÷ 6 = <strong style="color:var(--green)">60°</strong>
+    </div>
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">🔍</span> O que observar</div>
-    <p>• Todos os vértices <strong style="color:var(--accent3)">tocam a circunferência</strong></p>
-    <p>• Os triângulos formados pelo centro são sempre <strong style="color:var(--accent2)">isósceles</strong> (dois lados = raio)</p>
-    <p>• Quanto mais lados, mais o polígono <strong style="color:var(--accent)">se aproxima da circunferência</strong></p>
-    <p>• O ângulo central diminui conforme n aumenta</p>
+    <div class="conceito-title">
+      <div class="badge-icon">📏</div>
+      Tamanho do lado
+    </div>
+    <div class="conceito-body">
+      Para calcular o lado de qualquer polígono regular inscrito em uma circunferência de raio <strong>R</strong>:
+    </div>
+    <div class="formula">
+      lado = <span class="dest">2 × R × sen(180°/n)</span>
+    </div>
+    <div class="conceito-body" style="margin-top:8px; font-size:13px;">
+      Não precisa decorar essa fórmula agora — o que você precisa guardar são os casos especiais 👇
+    </div>
   </div>
-</div>
-
-<!-- ===================== TAB 2: FÓRMULAS ===================== -->
-<div class="section" id="tab2">
 
   <div class="card">
-    <div class="card-title"><span class="icon">📋</span> Tabela de referência rápida</div>
-    <table>
-      <tr>
-        <th>Polígono</th>
-        <th>n</th>
-        <th>Ângulo central</th>
-        <th>Lado (em R)</th>
+    <div class="conceito-title">
+      <div class="badge-icon">🔵</div>
+      Raio da circunferência (R)
+    </div>
+    <div class="conceito-body">
+      O <strong>raio R</strong> vai do <strong>centro até um vértice</strong> do polígono. Ele é o raio da circunferência <em>circunscrita</em> — a que passa por fora, nos cantos.
+    </div>
+    <div style="background:#f5f0ff; border-radius:12px; padding:12px; margin-top:12px; font-size:13px; font-weight:700; color:var(--purple); display:flex; align-items:center; gap:8px;">
+      <span style="font-size:18px;">📌</span>
+      Centro → vértice = Raio R (chega no canto do polígono)
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="conceito-title">
+      <div class="badge-icon">📍</div>
+      Apótema (a)
+    </div>
+    <div class="conceito-body">
+      O <strong>apótema</strong> vai do <strong>centro até o meio de um lado</strong>. É sempre <strong>menor que o raio</strong> e forma um ângulo reto (90°) com o lado.
+    </div>
+    <div class="formula">
+      apótema = <span class="dest">R × cos(180°/n)</span>
+    </div>
+    <div style="background:#fff5e6; border-radius:12px; padding:12px; margin-top:10px; font-size:13px; font-weight:700; color:#a05a00;">
+      <strong>Diferença fácil de lembrar:</strong><br>
+      🔵 Raio → vai ao <em>vértice</em> (canto)<br>
+      🟠 Apótema → vai ao <em>meio do lado</em> (arresta)
+    </div>
+    <div class="conceito-body" style="margin-top:10px; font-size:13px;">
+      O apótema também é o <strong>raio da circunferência inscrita</strong> — a circunferência que fica <em>dentro</em> do polígono, tocando cada lado pelo meio.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="conceito-title">
+      <div class="badge-icon">📊</div>
+      Raio vs Apótema — lado a lado
+    </div>
+    <table class="tabela">
+      <tr><th></th><th>Raio (R)</th><th>Apótema (a)</th></tr>
+      <tr><td>Vai até...</td><td>Vértice (canto)</td><td>Meio do lado</td></tr>
+      <tr><td>Ângulo com o lado</td><td>Variável</td><td>Sempre 90°</td></tr>
+      <tr><td>Tamanho</td><td>Maior</td><td>Menor que R</td></tr>
+      <tr><td>Circunferência</td><td>Circunscrita (fora)</td><td>Inscrita (dentro)</td></tr>
+      <tr><td>Fórmula</td><td>—</td><td>R·cos(180°/n)</td></tr>
+    </table>
+    <div style="background:var(--green-light); border-radius:12px; padding:11px 13px; margin-top:12px; font-size:13px; font-weight:700; color:#005a40;">
+      💡 Área do polígono = (Perímetro × Apótema) ÷ 2
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="conceito-title">
+      <div class="badge-icon">⭐</div>
+      Casos que mais caem na prova
+    </div>
+    <table class="tabela">
+      <tr><th>Polígono</th><th>n</th><th>Â. Central</th><th>Lado</th><th>Apótema</th></tr>
+      <tr><td>Triângulo equil.</td><td>3</td><td>120°</td><td>R√3</td><td>R/2</td></tr>
+      <tr class="destaque"><td>⭐ Quadrado</td><td>4</td><td>90°</td><td>R√2</td><td>R√2/2</td></tr>
+      <tr><td>Pentágono</td><td>5</td><td>72°</td><td>≈1,18R</td><td>≈0,81R</td></tr>
+      <tr class="destaque" style="background:#f5f0ff !important;">
+        <td style="color:var(--purple) !important;">🏆 Hexágono</td>
+        <td>6</td><td>60°</td>
+        <td style="color:var(--purple) !important; font-weight:900 !important;">= R !!!</td>
+        <td style="color:var(--purple) !important;">R√3/2</td>
       </tr>
-      <tr><td class="val">Triângulo equil.</td><td class="val">3</td><td>120°</td><td>R√3 ≈ 1,73R</td></tr>
-      <tr><td class="val">Quadrado</td><td class="val">4</td><td>90°</td><td>R√2 ≈ 1,41R</td></tr>
-      <tr><td class="val">Pentágono</td><td class="val">5</td><td>72°</td><td>≈ 1,18R</td></tr>
-      <tr><td class="val">Hexágono</td><td class="val">6</td><td>60°</td><td><strong style="color:var(--accent3)">R</strong> (= raio!)</td></tr>
-      <tr><td class="val">Heptágono</td><td class="val">7</td><td>≈ 51,4°</td><td>≈ 0,87R</td></tr>
-      <tr><td class="val">Octógono</td><td class="val">8</td><td>45°</td><td>≈ 0,77R</td></tr>
-      <tr><td class="val">Decágono</td><td class="val">10</td><td>36°</td><td>≈ 0,62R</td></tr>
-      <tr><td class="val">Dodecágono</td><td class="val">12</td><td>30°</td><td>≈ 0,52R</td></tr>
+      <tr><td>Octógono</td><td>8</td><td>45°</td><td>≈0,77R</td><td>≈0,92R</td></tr>
     </table>
   </div>
 
-  <div class="card">
-    <div class="card-title"><span class="icon">🧮</span> Fórmulas gerais</div>
-    <div class="highlight">
-      <span class="yellow">Ângulo central:</span> α = 360° / n<br><br>
-      <span class="yellow">Ângulo interno:</span> θ = (n−2) · 180° / n<br><br>
-      <span class="yellow">Lado:</span> ℓ = 2R · sen(180°/n)<br><br>
-      <span class="yellow">Apótema (raio inscrito):</span> a = R · cos(180°/n)<br><br>
-      <span class="yellow">Área:</span> A = (n · R² · sen(360°/n)) / 2<br><br>
-      <span class="yellow">Perímetro:</span> P = n · ℓ = 2nR · sen(180°/n)
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title"><span class="icon">🏆</span> Dica de prova</div>
-    <p>Para o <strong style="color:var(--accent3)">hexágono regular inscrito</strong>:</p>
-    <div class="highlight">
-      ℓ = R &nbsp;→&nbsp; <span class="green">o hexágono é formado por 6 triângulos equiláteros!</span><br>
-      Área = 3R²√3 / 2<br>
-      Perímetro = 6R
-    </div>
-    <p>Para o <strong style="color:var(--accent2)">quadrado inscrito</strong> em circunferência de diâmetro d:</p>
-    <div class="highlight">
-      diagonal do quadrado = diâmetro = <span class="yellow">2R</span><br>
-      ℓ = 2R/√2 = R√2
-    </div>
-  </div>
 </div>
 
-<!-- ===================== TAB 3: EXERCÍCIOS ===================== -->
+<!-- ===== TAB 1: VISUAL ===== -->
+<div class="section" id="tab1">
+
+  <div class="canvas-section">
+    <h3>🔵 Clique e veja como fica!</h3>
+    <canvas id="polyCanvas" width="300" height="300"></canvas>
+    <div class="poly-btns" id="polyBtns">
+      <button class="poly-btn active" onclick="selPoly(3,this)">Triângulo</button>
+      <button class="poly-btn" onclick="selPoly(4,this)">Quadrado</button>
+      <button class="poly-btn" onclick="selPoly(5,this)">Pentágono</button>
+      <button class="poly-btn" onclick="selPoly(6,this)">Hexágono</button>
+      <button class="poly-btn" onclick="selPoly(8,this)">Octógono</button>
+      <button class="poly-btn" onclick="selPoly(12,this)">Dodecágono</button>
+    </div>
+    <div class="poly-stats" id="polyStats"></div>
+  </div>
+
+  <div class="card">
+    <div class="conceito-title"><div class="badge-icon">👀</div>Observe!</div>
+    <div class="conceito-body">
+      <strong style="color:var(--purple)">🟡 Pontos amarelos</strong> = vértices (sempre na borda)<br><br>
+      <strong style="color:var(--green)">🟢 Ponto verde</strong> = centro da circunferência<br><br>
+      <strong style="color:#e17055">🟠 Linha laranja</strong> = apótema (centro → meio do lado)<br><br>
+      <strong style="color:var(--purple)">🔵 Linha roxa tracejada</strong> = raio R (centro → vértice)<br><br>
+      <strong>Repara:</strong> o apótema é sempre menor que o raio!
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== TAB 2: MACETES ===== -->
+<div class="section" id="tab2">
+
+  <div style="text-align:center; font-size:24px; margin-bottom:16px;">🧠 Cola mental — salva nas provas!</div>
+
+  <div class="macete">
+    <div class="macete-label">🏆 Macete nº 1</div>
+    <p><strong>Hexágono = lado igual ao raio!</strong><br>
+    Se a circunferência tem raio 10 cm → o hexágono inscrito tem lado = 10 cm.<br>
+    <em>Por quê? Porque ele forma 6 triângulos equiláteros iguais a partir do centro!</em></p>
+  </div>
+
+  <div class="macete">
+    <div class="macete-label">⚡ Macete nº 2</div>
+    <p><strong>Ângulo central = 360 ÷ n</strong><br>
+    Dividiu 360 pelo número de lados, achou o ângulo central.<br>
+    Exemplo: octógono → 360 ÷ 8 = <strong>45°</strong></p>
+  </div>
+
+  <div class="macete">
+    <div class="macete-label">📐 Macete nº 3</div>
+    <p><strong>Quadrado: diagonal = diâmetro!</strong><br>
+    A diagonal do quadrado inscrito sempre passa pelo centro → ela é igual ao <strong>diâmetro (2R)</strong>.<br>
+    Então o lado do quadrado = 2R ÷ √2 = <strong>R√2</strong></p>
+  </div>
+
+  <div class="macete">
+    <div class="macete-label">🔢 Macete nº 4</div>
+    <p><strong>Ângulo interno = (n−2) × 180 ÷ n</strong><br>
+    Pentágono: (5−2) × 180 ÷ 5 = 540 ÷ 5 = <strong>108°</strong><br>
+    Hexágono: (6−2) × 180 ÷ 6 = 720 ÷ 6 = <strong>120°</strong></p>
+  </div>
+
+  <div class="macete">
+    <div class="macete-label">🔄 Macete nº 5</div>
+    <p><strong>Descobrir o número de lados pelo ângulo central:</strong><br>
+    n = 360 ÷ ângulo central<br>
+    Ângulo central = 36° → n = 360 ÷ 36 = <strong>10 lados (decágono)</strong></p>
+  </div>
+
+  <div class="macete">
+    <div class="macete-label">📍 Macete nº 6</div>
+    <p><strong>Apótema: do centro ao meio do lado!</strong><br>
+    Fácil de lembrar: <strong>R vai ao vértice (canto)</strong>, <strong>apótema vai ao meio do lado</strong>.<br>
+    E sempre: apótema &lt; Raio &lt; Diâmetro.</p>
+  </div>
+
+  <div class="macete">
+    <div class="macete-label">📐 Macete nº 7</div>
+    <p><strong>Área com apótema:</strong><br>
+    Área = (Perímetro × Apótema) ÷ 2<br>
+    Isso funciona para <strong>qualquer polígono regular!</strong></p>
+  </div>
+
+  <div class="card" style="background: linear-gradient(135deg, #6c5ce722, #a29bfe22); border-color: var(--purple);">
+    <div class="conceito-title"><div class="badge-icon">🚀</div> Resumão rápido</div>
+    <div class="formula" style="font-size:13px; line-height:2.2;">
+      Ângulo central → <span class="dest">360 ÷ n</span><br>
+      Ângulo interno → <span class="dest">(n−2)×180 ÷ n</span><br>
+      Lado geral → <span class="dest">2R·sen(180°/n)</span><br>
+      <span style="color:#e17055">Apótema → R·cos(180°/n)</span><br>
+      Hexágono → <span class="dest">lado = R</span> ⭐<br>
+      Quadrado → <span class="dest">lado = R√2</span><br>
+      Triângulo equil. → <span class="dest">lado = R√3</span><br>
+      <span style="color:#e17055">Área = (Perímetro × Apótema) ÷ 2</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== TAB 3: DESAFIOS / QUIZ ===== -->
 <div class="section" id="tab3">
 
-  <div class="score-bar">
-    <span class="score-label">Sua pontuação</span>
-    <span class="score-val" id="scoreVal">0 / 12</span>
+  <div class="scoreboard">
+    <div class="score-info">
+      <div class="label">Sua pontuação</div>
+      <div class="val" id="scoreVal">0 / 14</div>
+    </div>
+    <div class="score-stars" id="stars">⭐⭐⭐⭐⭐</div>
   </div>
 
-  <!-- Ex 1 -->
-  <div class="exercise">
-    <div class="ex-header">
-      <div class="ex-num">1</div>
-      <div class="ex-title">Ângulo central do hexágono</div>
+  <!-- NÍVEL 1 -->
+  <div class="level-sep"><span>🟢 Nível 1 — Iniciante</span></div>
+
+  <div class="question-card">
+    <div class="q-num">Questão 1</div>
+    <div class="q-text">Um hexágono regular tem quantos lados?</div>
+    <div class="opts" id="q1">
+      <div class="opt" onclick="ans(1,'A')"><span class="opt-letter">A</span> 5 lados</div>
+      <div class="opt" onclick="ans(1,'B')"><span class="opt-letter">B</span> 6 lados</div>
+      <div class="opt" onclick="ans(1,'C')"><span class="opt-letter">C</span> 7 lados</div>
+      <div class="opt" onclick="ans(1,'D')"><span class="opt-letter">D</span> 8 lados</div>
     </div>
-    <div class="ex-body">Um hexágono regular está inscrito em uma circunferência. Qual é o ângulo central correspondente a cada lado?</div>
-    <div class="options" id="q1">
-      <div class="option" onclick="answer(1,'A')"><span class="option-letter">A</span> 45°</div>
-      <div class="option" onclick="answer(1,'B')"><span class="option-letter">B</span> 60°</div>
-      <div class="option" onclick="answer(1,'C')"><span class="option-letter">C</span> 72°</div>
-      <div class="option" onclick="answer(1,'D')"><span class="option-letter">D</span> 90°</div>
-    </div>
-    <div class="feedback" id="f1"></div>
+    <div class="feedback-box" id="f1"></div>
   </div>
 
-  <!-- Ex 2 -->
-  <div class="exercise">
-    <div class="ex-header">
-      <div class="ex-num">2</div>
-      <div class="ex-title">Lado do hexágono inscrito</div>
+  <div class="question-card">
+    <div class="q-num">Questão 2</div>
+    <div class="q-text">Qual é o ângulo central de um quadrado inscrito na circunferência?</div>
+    <div class="q-hint">💡 Use: ângulo central = 360° ÷ n</div>
+    <div class="opts" id="q2">
+      <div class="opt" onclick="ans(2,'A')"><span class="opt-letter">A</span> 60°</div>
+      <div class="opt" onclick="ans(2,'B')"><span class="opt-letter">B</span> 72°</div>
+      <div class="opt" onclick="ans(2,'C')"><span class="opt-letter">C</span> 90°</div>
+      <div class="opt" onclick="ans(2,'D')"><span class="opt-letter">D</span> 120°</div>
     </div>
-    <div class="ex-body">Um hexágono regular está inscrito em uma circunferência de raio 10 cm. Qual é o comprimento de cada lado?</div>
-    <div class="options" id="q2">
-      <div class="option" onclick="answer(2,'A')"><span class="option-letter">A</span> 5 cm</div>
-      <div class="option" onclick="answer(2,'B')"><span class="option-letter">B</span> 10√2 cm</div>
-      <div class="option" onclick="answer(2,'C')"><span class="option-letter">C</span> 10 cm</div>
-      <div class="option" onclick="answer(2,'D')"><span class="option-letter">D</span> 10√3 cm</div>
-    </div>
-    <div class="feedback" id="f2"></div>
+    <div class="feedback-box" id="f2"></div>
   </div>
 
-  <!-- Ex 3 -->
-  <div class="exercise">
-    <div class="ex-header">
-      <div class="ex-num">3</div>
-      <div class="ex-title">Lado do quadrado inscrito</div>
+  <div class="question-card">
+    <div class="q-num">Questão 3</div>
+    <div class="q-text">Um polígono regular tem ângulo central de 45°. Quantos lados ele tem?</div>
+    <div class="q-hint">💡 n = 360 ÷ ângulo central</div>
+    <div class="opts" id="q3">
+      <div class="opt" onclick="ans(3,'A')"><span class="opt-letter">A</span> 6 lados</div>
+      <div class="opt" onclick="ans(3,'B')"><span class="opt-letter">B</span> 8 lados</div>
+      <div class="opt" onclick="ans(3,'C')"><span class="opt-letter">C</span> 9 lados</div>
+      <div class="opt" onclick="ans(3,'D')"><span class="opt-letter">D</span> 10 lados</div>
     </div>
-    <div class="ex-body">Um quadrado está inscrito em uma circunferência de raio R = 8 cm. Qual é a medida do lado do quadrado?</div>
-    <div class="options" id="q3">
-      <div class="option" onclick="answer(3,'A')"><span class="option-letter">A</span> 4√2 cm</div>
-      <div class="option" onclick="answer(3,'B')"><span class="option-letter">B</span> 8√2 cm</div>
-      <div class="option" onclick="answer(3,'C')"><span class="option-letter">C</span> 8 cm</div>
-      <div class="option" onclick="answer(3,'D')"><span class="option-letter">D</span> 16 cm</div>
-    </div>
-    <div class="feedback" id="f3"></div>
+    <div class="feedback-box" id="f3"></div>
   </div>
 
-  <!-- Ex 4 -->
-  <div class="exercise">
-    <div class="ex-header">
-      <div class="ex-num">4</div>
-      <div class="ex-title">Quantos lados tem o polígono?</div>
+  <!-- NÍVEL 2 -->
+  <div class="level-sep"><span>🔵 Nível 2 — Básico</span></div>
+
+  <div class="question-card">
+    <div class="q-num">Questão 4</div>
+    <div class="q-text">Um hexágono regular está inscrito numa circunferência de raio 7 cm. Qual é o comprimento de cada lado?</div>
+    <div class="q-hint">🏆 Lembra do macete do hexágono!</div>
+    <div class="opts" id="q4">
+      <div class="opt" onclick="ans(4,'A')"><span class="opt-letter">A</span> 3,5 cm</div>
+      <div class="opt" onclick="ans(4,'B')"><span class="opt-letter">B</span> 7√2 cm</div>
+      <div class="opt" onclick="ans(4,'C')"><span class="opt-letter">C</span> 7 cm</div>
+      <div class="opt" onclick="ans(4,'D')"><span class="opt-letter">D</span> 14 cm</div>
     </div>
-    <div class="ex-body">Um polígono regular inscrito em uma circunferência tem ângulo central de 36°. Quantos lados possui esse polígono?</div>
-    <div class="options" id="q4">
-      <div class="option" onclick="answer(4,'A')"><span class="option-letter">A</span> 8 lados</div>
-      <div class="option" onclick="answer(4,'B')"><span class="option-letter">B</span> 9 lados</div>
-      <div class="option" onclick="answer(4,'C')"><span class="option-letter">C</span> 10 lados</div>
-      <div class="option" onclick="answer(4,'D')"><span class="option-letter">D</span> 12 lados</div>
-    </div>
-    <div class="feedback" id="f4"></div>
+    <div class="feedback-box" id="f4"></div>
   </div>
 
-  <!-- Ex 5 -->
-  <div class="exercise">
-    <div class="ex-header">
-      <div class="ex-num">5</div>
-      <div class="ex-title">Triângulo inscrito (desafio)</div>
+  <div class="question-card">
+    <div class="q-num">Questão 5</div>
+    <div class="q-text">Um quadrado está inscrito em uma circunferência de raio R = 5 cm. Qual é o comprimento do lado do quadrado?</div>
+    <div class="q-hint">📐 Macete: lado do quadrado = R√2</div>
+    <div class="opts" id="q5">
+      <div class="opt" onclick="ans(5,'A')"><span class="opt-letter">A</span> 5 cm</div>
+      <div class="opt" onclick="ans(5,'B')"><span class="opt-letter">B</span> 5√2 cm</div>
+      <div class="opt" onclick="ans(5,'C')"><span class="opt-letter">C</span> 5√3 cm</div>
+      <div class="opt" onclick="ans(5,'D')"><span class="opt-letter">D</span> 10 cm</div>
     </div>
-    <div class="ex-body">Um triângulo equilátero está inscrito em uma circunferência de raio R = 6 cm. Qual é o comprimento do lado do triângulo? (use √3 ≈ 1,73)</div>
-    <div class="options" id="q5">
-      <div class="option" onclick="answer(5,'A')"><span class="option-letter">A</span> 6 cm</div>
-      <div class="option" onclick="answer(5,'B')"><span class="option-letter">B</span> 6√2 cm ≈ 8,49 cm</div>
-      <div class="option" onclick="answer(5,'C')"><span class="option-letter">C</span> 6√3 cm ≈ 10,39 cm</div>
-      <div class="option" onclick="answer(5,'D')"><span class="option-letter">D</span> 12 cm</div>
-    </div>
-    <div class="feedback" id="f5"></div>
+    <div class="feedback-box" id="f5"></div>
   </div>
 
-  <!-- Ex 6 -->
-  <div class="exercise">
-    <div class="ex-header">
-      <div class="ex-num">6</div>
-      <div class="ex-title">Perímetro do hexágono inscrito</div>
+  <div class="question-card">
+    <div class="q-num">Questão 6</div>
+    <div class="q-text">Qual é o ângulo interno de um hexágono regular?</div>
+    <div class="q-hint">💡 (n−2)×180 ÷ n</div>
+    <div class="opts" id="q6">
+      <div class="opt" onclick="ans(6,'A')"><span class="opt-letter">A</span> 90°</div>
+      <div class="opt" onclick="ans(6,'B')"><span class="opt-letter">B</span> 108°</div>
+      <div class="opt" onclick="ans(6,'C')"><span class="opt-letter">C</span> 120°</div>
+      <div class="opt" onclick="ans(6,'D')"><span class="opt-letter">D</span> 135°</div>
     </div>
-    <div class="ex-body">Um hexágono regular está inscrito em uma circunferência de raio R = 5 cm. Qual é o perímetro do hexágono?</div>
-    <div class="options" id="q6">
-      <div class="option" onclick="answer(6,'A')"><span class="option-letter">A</span> 5√3 cm</div>
-      <div class="option" onclick="answer(6,'B')"><span class="option-letter">B</span> 20 cm</div>
-      <div class="option" onclick="answer(6,'C')"><span class="option-letter">C</span> 30 cm</div>
-      <div class="option" onclick="answer(6,'D')"><span class="option-letter">D</span> 5√6 cm</div>
-    </div>
-    <div class="feedback" id="f6"></div>
+    <div class="feedback-box" id="f6"></div>
   </div>
 
-  <!-- Ex 7 -->
-  <div class="exercise">
-    <div class="ex-header">
-      <div class="ex-num">7</div>
-      <div class="ex-title">Ângulo interno do pentágono</div>
+  <!-- NÍVEL 3 -->
+  <div class="level-sep"><span>🟡 Nível 3 — Intermediário</span></div>
+
+  <div class="question-card">
+    <div class="q-num">Questão 7</div>
+    <div class="q-text">Um hexágono regular tem lado = 10 cm. Qual é o raio da circunferência circunscrita?</div>
+    <div class="opts" id="q7">
+      <div class="opt" onclick="ans(7,'A')"><span class="opt-letter">A</span> 5 cm</div>
+      <div class="opt" onclick="ans(7,'B')"><span class="opt-letter">B</span> 10√2 cm</div>
+      <div class="opt" onclick="ans(7,'C')"><span class="opt-letter">C</span> 10 cm</div>
+      <div class="opt" onclick="ans(7,'D')"><span class="opt-letter">D</span> 20 cm</div>
     </div>
-    <div class="ex-body">Qual é a medida do ângulo interno de um pentágono regular inscrito em uma circunferência?</div>
-    <div class="options" id="q7">
-      <div class="option" onclick="answer(7,'A')"><span class="option-letter">A</span> 100°</div>
-      <div class="option" onclick="answer(7,'B')"><span class="option-letter">B</span> 108°</div>
-      <div class="option" onclick="answer(7,'C')"><span class="option-letter">C</span> 120°</div>
-      <div class="option" onclick="answer(7,'D')"><span class="option-letter">D</span> 72°</div>
-    </div>
-    <div class="feedback" id="f7"></div>
+    <div class="feedback-box" id="f7"></div>
   </div>
 
-  <!-- Ex 8 -->
-  <div class="exercise">
-    <div class="ex-header">
-      <div class="ex-num">8</div>
-      <div class="ex-title">Diagonal do quadrado inscrito</div>
+  <div class="question-card">
+    <div class="q-num">Questão 8</div>
+    <div class="q-text">Um hexágono de raio 6 cm. Qual é o perímetro total do hexágono?</div>
+    <div class="opts" id="q8">
+      <div class="opt" onclick="ans(8,'A')"><span class="opt-letter">A</span> 24 cm</div>
+      <div class="opt" onclick="ans(8,'B')"><span class="opt-letter">B</span> 36 cm</div>
+      <div class="opt" onclick="ans(8,'C')"><span class="opt-letter">C</span> 42 cm</div>
+      <div class="opt" onclick="ans(8,'D')"><span class="opt-letter">D</span> 6√3 cm</div>
     </div>
-    <div class="ex-body">Um quadrado está inscrito em uma circunferência de diâmetro 14 cm. Qual é a diagonal do quadrado?</div>
-    <div class="options" id="q8">
-      <div class="option" onclick="answer(8,'A')"><span class="option-letter">A</span> 7 cm</div>
-      <div class="option" onclick="answer(8,'B')"><span class="option-letter">B</span> 7√2 cm</div>
-      <div class="option" onclick="answer(8,'C')"><span class="option-letter">C</span> 14 cm</div>
-      <div class="option" onclick="answer(8,'D')"><span class="option-letter">D</span> 14√2 cm</div>
-    </div>
-    <div class="feedback" id="f8"></div>
+    <div class="feedback-box" id="f8"></div>
   </div>
 
-  <!-- Ex 9 -->
-  <div class="exercise">
-    <div class="ex-header">
-      <div class="ex-num">9</div>
-      <div class="ex-title">Raio a partir do lado</div>
+  <div class="question-card">
+    <div class="q-num">Questão 9</div>
+    <div class="q-text">Um quadrado inscrito tem diagonal = 10 cm. Qual é o raio da circunferência?</div>
+    <div class="q-hint">📐 Diagonal do quadrado = diâmetro da circunferência!</div>
+    <div class="opts" id="q9">
+      <div class="opt" onclick="ans(9,'A')"><span class="opt-letter">A</span> 10 cm</div>
+      <div class="opt" onclick="ans(9,'B')"><span class="opt-letter">B</span> 5 cm</div>
+      <div class="opt" onclick="ans(9,'C')"><span class="opt-letter">C</span> 5√2 cm</div>
+      <div class="opt" onclick="ans(9,'D')"><span class="opt-letter">D</span> 20 cm</div>
     </div>
-    <div class="ex-body">Um hexágono regular tem lado medindo 8 cm. Qual é o raio da circunferência circunscrita a esse hexágono?</div>
-    <div class="options" id="q9">
-      <div class="option" onclick="answer(9,'A')"><span class="option-letter">A</span> 4 cm</div>
-      <div class="option" onclick="answer(9,'B')"><span class="option-letter">B</span> 4√3 cm</div>
-      <div class="option" onclick="answer(9,'C')"><span class="option-letter">C</span> 8 cm</div>
-      <div class="option" onclick="answer(9,'D')"><span class="option-letter">D</span> 16 cm</div>
-    </div>
-    <div class="feedback" id="f9"></div>
+    <div class="feedback-box" id="f9"></div>
   </div>
 
-  <!-- Ex 10 -->
-  <div class="exercise">
-    <div class="ex-header">
-      <div class="ex-num">10</div>
-      <div class="ex-title">Octógono — soma de ângulos centrais</div>
+  <!-- NÍVEL 4 -->
+  <div class="level-sep"><span>🔴 Nível 4 — Avançado</span></div>
+
+  <div class="question-card">
+    <div class="q-num">Questão 10</div>
+    <div class="q-text">Um octógono regular inscrito em circunferência de raio R = 4 cm. Qual é a soma dos ângulos centrais de 5 lados consecutivos?</div>
+    <div class="opts" id="q10">
+      <div class="opt" onclick="ans(10,'A')"><span class="opt-letter">A</span> 180°</div>
+      <div class="opt" onclick="ans(10,'B')"><span class="opt-letter">B</span> 200°</div>
+      <div class="opt" onclick="ans(10,'C')"><span class="opt-letter">C</span> 225°</div>
+      <div class="opt" onclick="ans(10,'D')"><span class="opt-letter">D</span> 270°</div>
     </div>
-    <div class="ex-body">Um octógono regular está inscrito em uma circunferência. Qual é a soma dos ângulos centrais de 3 lados consecutivos desse octógono?</div>
-    <div class="options" id="q10">
-      <div class="option" onclick="answer(10,'A')"><span class="option-letter">A</span> 90°</div>
-      <div class="option" onclick="answer(10,'B')"><span class="option-letter">B</span> 100°</div>
-      <div class="option" onclick="answer(10,'C')"><span class="option-letter">C</span> 112,5°</div>
-      <div class="option" onclick="answer(10,'D')"><span class="option-letter">D</span> 135°</div>
-    </div>
-    <div class="feedback" id="f10"></div>
+    <div class="feedback-box" id="f10"></div>
   </div>
 
-  <!-- Ex 11 -->
-  <div class="exercise">
-    <div class="ex-header">
-      <div class="ex-num">11</div>
-      <div class="ex-title">Área do triângulo equilátero inscrito</div>
+  <div class="question-card">
+    <div class="q-num">Questão 11</div>
+    <div class="q-text">Um triângulo equilátero está inscrito em circunferência de raio 4 cm. Qual é a área do triângulo? (√3 ≈ 1,73)</div>
+    <div class="q-hint">💡 Lado do triângulo equil. inscrito = R√3</div>
+    <div class="opts" id="q11">
+      <div class="opt" onclick="ans(11,'A')"><span class="opt-letter">A</span> 12√3 cm² ≈ 20,8 cm²</div>
+      <div class="opt" onclick="ans(11,'B')"><span class="opt-letter">B</span> 8√3 cm² ≈ 13,9 cm²</div>
+      <div class="opt" onclick="ans(11,'C')"><span class="opt-letter">C</span> 16 cm²</div>
+      <div class="opt" onclick="ans(11,'D')"><span class="opt-letter">D</span> 24 cm²</div>
     </div>
-    <div class="ex-body">Um triângulo equilátero está inscrito em uma circunferência de raio R = 4 cm. Qual é a área do triângulo? (use √3 ≈ 1,73)</div>
-    <div class="options" id="q11">
-      <div class="option" onclick="answer(11,'A')"><span class="option-letter">A</span> 12√3 cm² ≈ 20,8 cm²</div>
-      <div class="option" onclick="answer(11,'B')"><span class="option-letter">B</span> 16√3 cm² ≈ 27,7 cm²</div>
-      <div class="option" onclick="answer(11,'C')"><span class="option-letter">C</span> 24 cm²</div>
-      <div class="option" onclick="answer(11,'D')"><span class="option-letter">D</span> 8√3 cm² ≈ 13,9 cm²</div>
-    </div>
-    <div class="feedback" id="f11"></div>
+    <div class="feedback-box" id="f11"></div>
   </div>
 
-  <!-- Ex 12 -->
-  <div class="exercise">
-    <div class="ex-header">
-      <div class="ex-num">12</div>
-      <div class="ex-title">Dodecágono — ângulo interno</div>
+  <!-- NÍVEL 5 -->
+  <div class="level-sep"><span>🏆 Nível 5 — Boss</span></div>
+
+  <div class="question-card">
+    <div class="q-num">Questão 12</div>
+    <div class="q-text">Qual das afirmações abaixo sobre o apótema está CORRETA?</div>
+    <div class="opts" id="q12">
+      <div class="opt" onclick="ans(12,'A')"><span class="opt-letter">A</span> Vai do centro até o vértice do polígono</div>
+      <div class="opt" onclick="ans(12,'B')"><span class="opt-letter">B</span> É sempre maior que o raio R</div>
+      <div class="opt" onclick="ans(12,'C')"><span class="opt-letter">C</span> Vai do centro até o meio de um lado, formando 90°</div>
+      <div class="opt" onclick="ans(12,'D')"><span class="opt-letter">D</span> É igual ao diâmetro da circunferência</div>
     </div>
-    <div class="ex-body">Qual é a medida do ângulo interno de um dodecágono (12 lados) regular inscrito em uma circunferência?</div>
-    <div class="options" id="q12">
-      <div class="option" onclick="answer(12,'A')"><span class="option-letter">A</span> 144°</div>
-      <div class="option" onclick="answer(12,'B')"><span class="option-letter">B</span> 150°</div>
-      <div class="option" onclick="answer(12,'C')"><span class="option-letter">C</span> 160°</div>
-      <div class="option" onclick="answer(12,'D')"><span class="option-letter">D</span> 168°</div>
+    <div class="feedback-box" id="f12"></div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-num">Questão 13</div>
+    <div class="q-text">Um hexágono regular tem raio R = 10 cm. Qual é o apótema desse hexágono? (√3 ≈ 1,73)</div>
+    <div class="q-hint">💡 Apótema do hexágono = R·cos(30°) = R·(√3/2)</div>
+    <div class="opts" id="q13">
+      <div class="opt" onclick="ans(13,'A')"><span class="opt-letter">A</span> 5 cm</div>
+      <div class="opt" onclick="ans(13,'B')"><span class="opt-letter">B</span> 10 cm</div>
+      <div class="opt" onclick="ans(13,'C')"><span class="opt-letter">C</span> 5√3 cm ≈ 8,66 cm</div>
+      <div class="opt" onclick="ans(13,'D')"><span class="opt-letter">D</span> 10√3 cm ≈ 17,3 cm</div>
     </div>
-    <div class="feedback" id="f12"></div>
+    <div class="feedback-box" id="f13"></div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-num">Questão 14 — BOSS 🏆</div>
+    <div class="q-text">Um dodecágono (12 lados) está inscrito numa circunferência de raio 2 cm. Qual é o ângulo interno desse polígono?</div>
+    <div class="opts" id="q14">
+      <div class="opt" onclick="ans(14,'A')"><span class="opt-letter">A</span> 144°</div>
+      <div class="opt" onclick="ans(14,'B')"><span class="opt-letter">B</span> 150°</div>
+      <div class="opt" onclick="ans(14,'C')"><span class="opt-letter">C</span> 160°</div>
+      <div class="opt" onclick="ans(14,'D')"><span class="opt-letter">D</span> 168°</div>
+    </div>
+    <div class="feedback-box" id="f14"></div>
+  </div>
+
+  <div id="finalMsg" style="display:none; text-align:center; padding:24px 16px;">
+    <div style="font-size:48px; margin-bottom:12px;">🏆</div>
+    <div style="font-size:20px; font-weight:900; color:var(--purple); margin-bottom:8px)">Parabéns, Nicolas!</div>
+    <div style="font-size:15px; color:var(--muted); font-weight:600;" id="finalText"></div>
   </div>
 
 </div>
 
 <script>
-// ---- Tab navigation ----
-function goTab(i) {
+// ---- Tabs ----
+function goTab(i, btn) {
   document.querySelectorAll('.section').forEach((s,j) => s.classList.toggle('active', j===i));
-  document.querySelectorAll('.tab').forEach((t,j) => t.classList.toggle('active', j===i));
-  if(i===1) drawPoly(currentN);
+  document.querySelectorAll('.nav-btn').forEach((b,j) => b.classList.toggle('active', j===i));
+  if(i===1) { setTimeout(()=>drawPoly(curN), 80); }
 }
 
-// ---- Canvas drawing ----
-let currentN = 3;
-function selectPoly(n, btn) {
-  currentN = n;
-  document.querySelectorAll('#polyBtns .btn').forEach(b => b.classList.remove('sel'));
-  btn.classList.add('sel');
+// ---- Canvas ----
+let curN = 3;
+function selPoly(n, btn) {
+  curN = n;
+  document.querySelectorAll('.poly-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
   drawPoly(n);
 }
 
 function drawPoly(n) {
-  const canvas = document.getElementById('mainCanvas');
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-  const cx = W/2, cy = H/2;
-  const R = 130;
+  const cv = document.getElementById('polyCanvas');
+  const ctx = cv.getContext('2d');
+  const W=cv.width, H=cv.height, cx=W/2, cy=H/2, R=120;
   ctx.clearRect(0,0,W,H);
 
-  // Background
-  ctx.fillStyle = '#0a0a12';
+  ctx.fillStyle='#f0f4ff';
   ctx.fillRect(0,0,W,H);
 
   // Grid dots
-  ctx.fillStyle = 'rgba(255,255,255,0.04)';
-  for(let x=20;x<W;x+=20) for(let y=20;y<H;y+=20) {
-    ctx.beginPath(); ctx.arc(x,y,1,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='rgba(108,92,231,0.08)';
+  for(let x=15;x<W;x+=18) for(let y=15;y<H;y+=18){
+    ctx.beginPath(); ctx.arc(x,y,1.5,0,Math.PI*2); ctx.fill();
   }
 
   // Circle
-  ctx.beginPath();
-  ctx.arc(cx,cy,R,0,Math.PI*2);
-  ctx.strokeStyle = 'rgba(124,106,247,0.5)';
-  ctx.lineWidth = 1.5;
-  ctx.setLineDash([6,4]);
-  ctx.stroke();
-  ctx.setLineDash([]);
+  ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2);
+  ctx.strokeStyle='rgba(108,92,231,0.35)';
+  ctx.lineWidth=2; ctx.setLineDash([6,5]); ctx.stroke(); ctx.setLineDash([]);
 
-  // Vertices
-  const pts = [];
-  for(let i=0;i<n;i++) {
-    const a = -Math.PI/2 + (2*Math.PI*i/n);
-    pts.push([cx + R*Math.cos(a), cy + R*Math.sin(a)]);
+  const pts=[];
+  for(let i=0;i<n;i++){
+    const a=-Math.PI/2+(2*Math.PI*i/n);
+    pts.push([cx+R*Math.cos(a), cy+R*Math.sin(a)]);
   }
 
-  // Radii (light)
-  pts.forEach(([x,y]) => {
-    ctx.beginPath();
-    ctx.moveTo(cx,cy);
-    ctx.lineTo(x,y);
-    ctx.strokeStyle = 'rgba(247,194,106,0.2)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
+  // Radii
+  pts.forEach(([x,y])=>{
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(x,y);
+    ctx.strokeStyle='rgba(108,92,231,0.15)'; ctx.lineWidth=1; ctx.stroke();
   });
 
-  // Polygon fill
-  ctx.beginPath();
-  ctx.moveTo(...pts[0]);
+  // Fill
+  ctx.beginPath(); ctx.moveTo(...pts[0]);
   for(let i=1;i<n;i++) ctx.lineTo(...pts[i]);
   ctx.closePath();
-  ctx.fillStyle = 'rgba(124,106,247,0.08)';
-  ctx.fill();
-  ctx.strokeStyle = '#7c6af7';
-  ctx.lineWidth = 2;
-  ctx.stroke();
+  ctx.fillStyle='rgba(108,92,231,0.12)'; ctx.fill();
+  ctx.strokeStyle='#6c5ce7'; ctx.lineWidth=2.5; ctx.stroke();
 
-  // Vertices dots
-  pts.forEach(([x,y]) => {
-    ctx.beginPath();
-    ctx.arc(x,y,5,0,Math.PI*2);
-    ctx.fillStyle = '#f7c26a';
-    ctx.fill();
+  // Vertices
+  pts.forEach(([x,y])=>{
+    ctx.beginPath(); ctx.arc(x,y,6,0,Math.PI*2);
+    ctx.fillStyle='#fdcb6e'; ctx.fill();
+    ctx.strokeStyle='#e17055'; ctx.lineWidth=1.5; ctx.stroke();
   });
 
   // Center
-  ctx.beginPath();
-  ctx.arc(cx,cy,4,0,Math.PI*2);
-  ctx.fillStyle = '#6af7c2';
-  ctx.fill();
+  ctx.beginPath(); ctx.arc(cx,cy,5,0,Math.PI*2);
+  ctx.fillStyle='#00b894'; ctx.fill();
 
-  // Labels R
-  ctx.font = '12px Space Mono, monospace';
-  ctx.fillStyle = '#f7c26a';
-  const mid = pts[0];
-  ctx.fillText('R', (cx+mid[0])/2 + 4, (cy+mid[1])/2 - 4);
+  // Apothem — center to midpoint of first side
+  const ap0 = [(pts[0][0]+pts[1][0])/2, (pts[0][1]+pts[1][1])/2];
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(ap0[0],ap0[1]);
+  ctx.strokeStyle='#e17055'; ctx.lineWidth=2.5; ctx.setLineDash([]);
+  ctx.stroke();
+  ctx.beginPath(); ctx.arc(ap0[0],ap0[1],5,0,Math.PI*2);
+  ctx.fillStyle='#e17055'; ctx.fill();
 
-  // Update info
-  const angCentral = (360/n).toFixed(1);
-  const lado = (2 * Math.sin(Math.PI/n)).toFixed(4);
-  const angInterno = ((n-2)*180/n).toFixed(1);
-  const area = (n * Math.sin(2*Math.PI/n) / 2).toFixed(4);
+  // R label
+  ctx.font='bold 12px Space Mono, monospace';
+  ctx.fillStyle='#6c5ce7';
+  const p=pts[0];
+  ctx.fillText('R',(cx+p[0])/2+5,(cy+p[1])/2-4);
 
-  document.getElementById('polyInfo').innerHTML = `
-    <div class="info-item"><div class="label">Nº de lados</div><div class="value">${n}</div></div>
-    <div class="info-item"><div class="label">Ângulo central</div><div class="value">${angCentral}°</div></div>
-    <div class="info-item"><div class="label">Ângulo interno</div><div class="value">${angInterno}°</div></div>
-    <div class="info-item"><div class="label">Lado (× R)</div><div class="value">${lado}R</div></div>
+  // Apothem label
+  ctx.fillStyle='#e17055';
+  ctx.fillText('a',(cx+ap0[0])/2+5,(cy+ap0[1])/2+4);
+
+  // Stats
+  const ac=(360/n).toFixed(1);
+  const ai=((n-2)*180/n).toFixed(1);
+  const l=(2*Math.sin(Math.PI/n)).toFixed(3);
+  const apotema=(Math.cos(Math.PI/n)).toFixed(3);
+  document.getElementById('polyStats').innerHTML=`
+    <div class="stat-box"><div class="stat-label">Nº de lados</div><div class="stat-val">${n}</div></div>
+    <div class="stat-box"><div class="stat-label">Ângulo central</div><div class="stat-val">${ac}°</div></div>
+    <div class="stat-box"><div class="stat-label" style="color:#6c5ce7">Raio (×R)</div><div class="stat-val">1,000</div></div>
+    <div class="stat-box"><div class="stat-label" style="color:#e17055">Apótema (×R)</div><div class="stat-val" style="color:#e17055">${apotema}</div></div>
+    <div class="stat-box"><div class="stat-label">Ângulo interno</div><div class="stat-val">${ai}°</div></div>
+    <div class="stat-box"><div class="stat-label">Lado (×R)</div><div class="stat-val">${l}</div></div>
   `;
 }
 
-// ---- Exercises ----
-const answers = { 1:'B', 2:'C', 3:'B', 4:'C', 5:'C', 6:'C', 7:'B', 8:'C', 9:'C', 10:'D', 11:'A', 12:'B' };
-const explanations = {
-  1: '✓ α = 360°/6 = 60°. O hexágono divide a circunferência em 6 arcos iguais de 60° cada.',
-  2: '✓ No hexágono regular inscrito, o lado é IGUAL ao raio. Portanto ℓ = 10 cm. Os 6 triângulos formados pelo centro são equiláteros!',
-  3: '✓ ℓ = 2R·sen(180°/4) = 2·8·sen(45°) = 16·(√2/2) = 8√2 cm.',
-  4: '✓ n = 360°/36° = 10 lados. É um decágono regular.',
-  5: '✓ ℓ = 2R·sen(180°/3) = 2·6·sen(60°) = 12·(√3/2) = 6√3 ≈ 10,39 cm.',
-  6: '✓ No hexágono regular, ℓ = R = 5 cm. Perímetro = 6 × 5 = 30 cm.',
-  7: '✓ θ = (n−2)·180°/n = (5−2)·180°/5 = 3·180°/5 = 540°/5 = 108°.',
-  8: '✓ A diagonal do quadrado inscrito coincide com o diâmetro da circunferência. d = 2R = diâmetro = 14 cm.',
-  9: '✓ No hexágono regular, o lado é igual ao raio. Se ℓ = 8 cm, então R = 8 cm.',
-  10: '✓ Ângulo central do octógono = 360°/8 = 45°. Soma de 3 lados = 3 × 45° = 135°.',
-  11: '✓ ℓ = R√3 = 4√3 cm. Área = (ℓ²√3)/4 = (48·√3)/4 = 12√3 ≈ 20,8 cm².',
-  12: '✓ θ = (12−2)·180°/12 = 10·180°/12 = 1800°/12 = 150°.'
+// ---- Quiz ----
+const CORRECT = {1:'B',2:'C',3:'B',4:'C',5:'B',6:'C',7:'C',8:'B',9:'B',10:'C',11:'A',12:'C',13:'C',14:'B'};
+const OK = {
+  1:'✅ Isso! Hexágono = 6 lados. (hexa = 6 em grego)',
+  2:'✅ Perfeito! 360÷4 = 90°. O quadrado divide a circunferência em 4 quartos iguais.',
+  3:'✅ Muito bem! n = 360÷45 = 8. É um octógono!',
+  4:'✅ Macete do hexágono: lado = R. Logo, lado = 7 cm. 🏆',
+  5:'✅ Certo! lado do quadrado = R√2 = 5√2 cm.',
+  6:'✅ Ângulo interno do hexágono = (6-2)×180÷6 = 720÷6 = 120°.',
+  7:'✅ No hexágono, R = lado. Se o lado é 10 cm → R = 10 cm!',
+  8:'✅ Perímetro = 6 × lado = 6 × R = 6 × 6 = 36 cm.',
+  9:'✅ Diagonal do quadrado = diâmetro = 10 cm. Logo R = 10÷2 = 5 cm.',
+  10:'✅ Ângulo central do octógono = 360÷8 = 45°. 5 lados: 5×45° = 225°.',
+  11:'✅ Lado = R√3 = 4√3. Área = (ℓ²√3)÷4 = (48√3)÷4 = 12√3 ≈ 20,8 cm².',
+  12:'✅ Exato! O apótema vai do centro ao MEIO do lado, sempre em ângulo reto (90°).',
+  13:'✅ Apótema do hexágono = R·cos(30°) = R·(√3/2) = 10·(√3/2) = 5√3 ≈ 8,66 cm.',
+  14:'✅ BOSS derrotado! θ = (12-2)×180÷12 = 1800÷12 = 150°. 🏆'
 };
-const wrongExp = {
-  1: '✗ Use α = 360°/n = 360°/6 = 60°.',
-  2: '✗ Lembre: no hexágono, ℓ = R. Logo ℓ = 10 cm.',
-  3: '✗ ℓ = 2R·sen(45°) = 2·8·(√2/2) = 8√2 cm.',
-  4: '✗ n = 360°/36° = 10.',
-  5: '✗ ℓ = 2R·sen(60°) = 6√3 cm.',
-  6: '✗ Hexágono: ℓ = R = 5 cm. Perímetro = 6 × 5 = 30 cm.',
-  7: '✗ Use θ = (n−2)·180°/n = (3·180°)/5 = 108°.',
-  8: '✗ A diagonal do quadrado inscrito = diâmetro = 14 cm.',
-  9: '✗ No hexágono regular, R = ℓ. Logo R = 8 cm.',
-  10: '✗ Ângulo central = 360°/8 = 45°. Para 3 lados: 3 × 45° = 135°.',
-  11: '✗ ℓ = R√3 = 4√3. Área = (ℓ²√3)/4 = 12√3 cm².',
-  12: '✗ θ = (12−2)·180°/12 = 1800°/12 = 150°.'
+const WRONG = {
+  1:'❌ Hexágono vem de "hexa" = 6. Tem 6 lados!',
+  2:'❌ Use 360÷n = 360÷4 = 90°.',
+  3:'❌ n = 360÷ângulo = 360÷45 = 8 lados.',
+  4:'❌ Macete: no hexágono, lado = R. Então lado = 7 cm!',
+  5:'❌ Para o quadrado inscrito, o lado = R√2 = 5√2 cm.',
+  6:'❌ Fórmula: (n-2)×180÷n = (6-2)×180÷6 = 720÷6 = 120°.',
+  7:'❌ No hexágono regular, R = lado. Se lado = 10, então R = 10 cm.',
+  8:'❌ Hexágono tem 6 lados e lado = R = 6 cm. Perímetro = 6×6 = 36 cm.',
+  9:'❌ A diagonal do quadrado = diâmetro = 10 cm. Logo R = diâm÷2 = 5 cm.',
+  10:'❌ 360÷8 = 45° por lado. 5×45° = 225°.',
+  11:'❌ Lado = R√3 = 4√3 cm. Área = (ℓ²×√3)÷4 = 12√3 cm².',
+  12:'❌ Esse é o Raio! O apótema vai ao MEIO do lado, formando 90°.',
+  13:'❌ Apótema = R·cos(180°/6) = R·cos(30°) = R·(√3/2) = 10·(√3/2) = 5√3 cm.',
+  14:'❌ θ = (n-2)×180÷n = (10×180)÷12 = 150°.'
 };
 
-const TOTAL = 12;
-let answered = {};
-let score = 0;
+const TOTAL=14;
+let done={}, score=0, xp=0;
 
-function answer(q, choice) {
-  if(answered[q]) return;
-  answered[q] = choice;
-  const correct = answers[q];
-  const opts = document.querySelectorAll(`#q${q} .option`);
-  opts.forEach((o,i) => {
-    const letters = ['A','B','C','D'];
-    if(letters[i] === correct) o.classList.add('correct');
-    else if(letters[i] === choice) o.classList.add('wrong');
+function ans(q, choice) {
+  if(done[q]) return;
+  done[q]=choice;
+  const correct=CORRECT[q];
+  const opts=document.querySelectorAll(`#q${q} .opt`);
+  const letters=['A','B','C','D'];
+  opts.forEach((o,i)=>{
+    if(letters[i]===correct) o.classList.add('correct');
+    else if(letters[i]===choice) o.classList.add('wrong');
   });
-  const fb = document.getElementById(`f${q}`);
-  if(choice === correct) {
+  const fb=document.getElementById(`f${q}`);
+  if(choice===correct){
     score++;
-    fb.textContent = explanations[q];
-    fb.className = 'feedback show ok';
+    xp+=10;
+    fb.innerHTML=OK[q]+`<span class="xp-gain">+10 XP</span>`;
+    fb.className='feedback-box show ok';
   } else {
-    fb.textContent = wrongExp[q];
-    fb.className = 'feedback show err';
+    fb.innerHTML=WRONG[q];
+    fb.className='feedback-box show err';
   }
-  document.getElementById('scoreVal').textContent = `${score} / ${TOTAL}`;
+  updateScore();
+
+  if(Object.keys(done).length===TOTAL) {
+    setTimeout(showFinal, 600);
+  }
 }
 
-// Init canvas
-setTimeout(() => drawPoly(3), 100);
+function updateScore(){
+  document.getElementById('scoreVal').textContent=`${score} / ${TOTAL}`;
+  const pct=Math.min(xp/140*100,100);
+  document.getElementById('xpBar').style.width=pct+'%';
+  document.getElementById('xpVal').textContent=xp+' XP';
+
+  const stars=document.getElementById('stars');
+  const s=score;
+  if(s<=3) stars.textContent='⭐☆☆☆☆';
+  else if(s<=6) stars.textContent='⭐⭐☆☆☆';
+  else if(s<=9) stars.textContent='⭐⭐⭐☆☆';
+  else if(s<=12) stars.textContent='⭐⭐⭐⭐☆';
+  else stars.textContent='⭐⭐⭐⭐⭐';
+}
+
+function showFinal(){
+  const m=document.getElementById('finalMsg');
+  const t=document.getElementById('finalText');
+  m.style.display='block';
+  if(score===14) t.textContent='Pontuação perfeita! Você dominou os polígonos inscritos! 🎉';
+  else if(score>=11) t.textContent=`${score}/14 — Muito bom! Revise os erros e você chega na perfeição!`;
+  else if(score>=7) t.textContent=`${score}/14 — Bom progresso! Volte nos macetes e tente de novo.`;
+  else t.textContent=`${score}/14 — Não desiste! Releia os conceitos e os macetes. Você consegue!`;
+}
+
+setTimeout(()=>drawPoly(3), 100);
 </script>
 </body>
 </html>
